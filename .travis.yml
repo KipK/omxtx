@@ -1,0 +1,10 @@
+language: c
+
+before_install:
+  # Make sure mono is installed,
+  # pipe stdout to dev/null because qq is still too chatty
+  - sudo apt-get update -qq > /dev/null
+  - sudo apt-get install -qq gcc-arm-linux-gnueabi make ncurses-dev > /dev/null
+
+script:
+  - gcc-arm-linux-gnueabi -march=armv6kz -marm omxtx.c -o omxtx
