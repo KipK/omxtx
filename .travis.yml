@@ -1,9 +1,9 @@
-install: make ncurses-dev gcc-arm-linux-gnueabi
+install: make get-deps
 
 language: c
 
 before_install:
-  # Make sure mono is installed,
+  # Make sure correct gcc is installed
   # pipe stdout to dev/null because qq is still too chatty
   - sudo apt-get update -qq > /dev/null
   - sudo apt-get install -qq gcc-arm-linux-gnueabi make ncurses-dev > /dev/null
