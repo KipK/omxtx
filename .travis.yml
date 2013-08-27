@@ -1,3 +1,4 @@
+install: make ncurses-dev gcc-arm-linux-gnueabi
 
 language: c
 
