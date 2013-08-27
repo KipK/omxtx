@@ -30,11 +30,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _VC_DISPMANX_H_
 #define _VC_DISPMANX_H_
 
-#include "~/interface/vcos/vcos.h"
-#include "~/interface/vctypes/vc_image_types.h"
+#include "interface/vcos/vcos.h"
+#include "interface/vctypes/vc_image_types.h"
 #include "vc_dispservice_x_defs.h"
-#include "~/interface/vmcs_host/vc_dispmanx_types.h"
-#include "~/interface/vchi/vchi.h"
+#include "interface/vmcs_host/vc_dispmanx_types.h"
+#include "interface/vchi/vchi.h"
 
 #ifdef __cplusplus
 extern "C" {
