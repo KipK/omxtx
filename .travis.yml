@@ -9,4 +9,7 @@ before_install:
   - sudo apt-get install -qq gcc-arm-linux-gnueabi make ncurses-dev
 
 script:
-  - arm-linux-gnueabi-gcc-4.6 -march=armv6kz -marm omxtx.c -o omxtx
+  - arm-linux-gnueabi-gcc-4.6 -march=armv6 -marm omxtx.c -o omxtx
+  
+after_script:
+  - file omxtx.c
