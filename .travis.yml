@@ -6,8 +6,7 @@ before_install:
   # Make sure correct gcc is installed
   # pipe stdout to dev/null because qq is still too chatty
   - sudo apt-get update -qq
-  - sudo apt-get install -qq gcc-arm-linux-gnueabi make ncurses-dev libavformat-dev build-essential subversion git-core checkinstall texi2html \
-libfaac-dev libopencore-amrnb-dev libopencore-amrwb-dev libsdl1.2-dev libtheora-dev libvorbis-dev libx11-dev libxfixes-dev libxvidcore-dev zlib1g-dev libavcodec-dev
+  - sudo apt-get install -qq gcc-arm-linux-gnueabi make ncurses-dev libavformat-dev build-essential subversion git-core checkinstall texi2html libfaac-dev libopencore-amrnb-dev libopencore-amrwb-dev libsdl1.2-dev libtheora-dev libvorbis-dev libx11-dev libxfixes-dev libxvidcore-dev zlib1g-dev libavcodec-dev
 
 script:
   - arm-linux-gnueabi-gcc-4.6 -march=armv6 -marm omxtx.c -o omxtx
