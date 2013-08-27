@@ -25,33 +25,25 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-// Header file with useful bits from other headers
+#ifndef VCOS_INTTYPES_H
+#define VCOS_INTTYPES_H
 
-#ifndef BCM_HOST_H
-#define BCM_HOST_H
-
-#include <stdint.h>
+/** \file
+ * Attempt to provide the support for fixed width integer types as per
+ * inttypes.h. This simply includes inttypes.h, which should find the
+ * system/toolchain version if present, otherwise falling back to the version
+ * in interface/vcos/<platform>. The vcos versions initially only provide the
+ * most common printf() macros.
+ */
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void bcm_host_init(void);
-void bcm_host_deinit(void);
-
-int32_t graphics_get_display_size( const uint16_t display_number,
-                                                    uint32_t *width,
-                                                    uint32_t *height);
-
-#include "interface/vmcs_host/vc_dispmanx.h"
-#include "interface/vmcs_host/vc_tvservice.h"
-#include "interface/vmcs_host/vc_cec.h"
-#include "interface/vmcs_host/vc_cecservice.h"
-#include "interface/vmcs_host/vcgencmd.h"
+#include <inttypes.h>
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif
-
+#endif /* VCOS_INTTYPES_H */

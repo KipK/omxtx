@@ -25,33 +25,47 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-// Header file with useful bits from other headers
+/*=============================================================================
+VideoCore OS Abstraction Layer - platform-specific types and defines
+=============================================================================*/
 
-#ifndef BCM_HOST_H
-#define BCM_HOST_H
+#ifndef VCOS_PLATFORM_TYPES_H
+#define VCOS_PLATFORM_TYPES_H
 
-#include <stdint.h>
+#include "interface/vcos/vcos_inttypes.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void bcm_host_init(void);
-void bcm_host_deinit(void);
+#define VCOSPRE_ extern
+#define VCOSPOST_
 
-int32_t graphics_get_display_size( const uint16_t display_number,
-                                                    uint32_t *width,
-                                                    uint32_t *height);
+#if defined(__GNUC__) && (( __GNUC__ > 2 ) || (( __GNUC__ == 2 ) && ( __GNUC_MINOR__ >= 3 )))
+#define VCOS_FORMAT_ATTR_(ARCHETYPE, STRING_INDEX, FIRST_TO_CHECK)  __attribute__ ((format (ARCHETYPE, STRING_INDEX, FIRST_TO_CHECK)))
+#else
+#define VCOS_FORMAT_ATTR_(ARCHETYPE, STRING_INDEX, FIRST_TO_CHECK)
+#endif
 
-#include "interface/vmcs_host/vc_dispmanx.h"
-#include "interface/vmcs_host/vc_tvservice.h"
-#include "interface/vmcs_host/vc_cec.h"
-#include "interface/vmcs_host/vc_cecservice.h"
-#include "interface/vmcs_host/vcgencmd.h"
+#if defined(__linux__) && !defined(NDEBUG) && defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+   #define VCOS_BKPT ({ __asm volatile ("int3":::"memory"); })
+#endif
+/*#define VCOS_BKPT vcos_abort() */
+
+#define VCOS_ASSERT_LOGGING         1
+#define VCOS_ASSERT_LOGGING_DISABLE 0
+
+extern void
+vcos_pthreads_logging_assert(const char *file, const char *func, unsigned int line, const char *fmt, ...);
+
+#define VCOS_ASSERT_MSG(...) ((VCOS_ASSERT_LOGGING && !VCOS_ASSERT_LOGGING_DISABLE) ? vcos_pthreads_logging_assert(__FILE__, __func__, __LINE__, __VA_ARGS__) : (void)0)
+
+#define VCOS_INLINE_BODIES
+#define VCOS_INLINE_DECL extern __inline__
+#define VCOS_INLINE_IMPL static __inline__
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif
-

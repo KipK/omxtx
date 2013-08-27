@@ -25,33 +25,24 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-// Header file with useful bits from other headers
+#ifndef VCFILED_CHECK_H
+#define VCFILED_CHECK_H
 
-#ifndef BCM_HOST_H
-#define BCM_HOST_H
-
-#include <stdint.h>
-
-#ifdef __cplusplus
-extern "C" {
+#ifdef ANDROID
+#define VCFILED_LOCKDIR "/tmp/vcfiled/vcfiled.pid"
+#define VCFILED_LOCKFILE "/tmp/vcfiled"
 #endif
 
-void bcm_host_init(void);
-void bcm_host_deinit(void);
-
-int32_t graphics_get_display_size( const uint16_t display_number,
-                                                    uint32_t *width,
-                                                    uint32_t *height);
-
-#include "interface/vmcs_host/vc_dispmanx.h"
-#include "interface/vmcs_host/vc_tvservice.h"
-#include "interface/vmcs_host/vc_cec.h"
-#include "interface/vmcs_host/vc_cecservice.h"
-#include "interface/vmcs_host/vcgencmd.h"
-
-#ifdef __cplusplus
-}
+#ifndef VCFILED_LOCKFILE
+#define VCFILED_LOCKDIR "/var/run/vcfiled"
+#define VCFILED_LOCKFILE VCFILED_LOCKDIR "/vcfiled"
 #endif
 
+typedef void (*VCFILED_LOGMSG_T)(int level, const char *fmt, ...);
+int vcfiled_lock(const char *filename, VCFILED_LOGMSG_T logmsg);
+extern int vcfiled_is_running(const char *lockfile);
+
+
 #endif
+
 

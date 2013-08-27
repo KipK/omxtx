@@ -23,35 +23,32 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ */
 
-// Header file with useful bits from other headers
+#ifndef VCHIQ_CFG_H
+#define VCHIQ_CFG_H
 
-#ifndef BCM_HOST_H
-#define BCM_HOST_H
+#define VCHIQ_MAGIC              VCHIQ_MAKE_FOURCC('V', 'C', 'H', 'I')
+/* The version of VCHIQ - change with any non-trivial change */
+#define VCHIQ_VERSION            6
+/* The minimum compatible version - update to match VCHIQ_VERSION with any
+** incompatible change */
+#define VCHIQ_VERSION_MIN        3
 
-#include <stdint.h>
+#define VCHIQ_MAX_STATES         2
+#define VCHIQ_MAX_SERVICES       4096
+#define VCHIQ_MAX_SLOTS          128
+#define VCHIQ_MAX_SLOTS_PER_SIDE 64
 
-#ifdef __cplusplus
-extern "C" {
+#define VCHIQ_NUM_CURRENT_BULKS        32
+#define VCHIQ_NUM_SERVICE_BULKS        4
+
+#ifndef VCHIQ_ENABLE_DEBUG
+#define VCHIQ_ENABLE_DEBUG             1
 #endif
 
-void bcm_host_init(void);
-void bcm_host_deinit(void);
-
-int32_t graphics_get_display_size( const uint16_t display_number,
-                                                    uint32_t *width,
-                                                    uint32_t *height);
-
-#include "interface/vmcs_host/vc_dispmanx.h"
-#include "interface/vmcs_host/vc_tvservice.h"
-#include "interface/vmcs_host/vc_cec.h"
-#include "interface/vmcs_host/vc_cecservice.h"
-#include "interface/vmcs_host/vcgencmd.h"
-
-#ifdef __cplusplus
-}
+#ifndef VCHIQ_ENABLE_STATS
+#define VCHIQ_ENABLE_STATS             1
 #endif
 
-#endif
-
+#endif /* VCHIQ_CFG_H */

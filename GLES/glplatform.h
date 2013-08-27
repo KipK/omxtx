@@ -24,34 +24,41 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+#ifndef __glplatform_h_
+#define __glplatform_h_
 
-// Header file with useful bits from other headers
-
-#ifndef BCM_HOST_H
-#define BCM_HOST_H
-
-#include <stdint.h>
+/* $Revision: 10601 $ on $Date:: 2010-03-04 22:15:27 -0800 #$ */
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void bcm_host_init(void);
-void bcm_host_deinit(void);
+/*
+ * This document is licensed under the SGI Free Software B License Version
+ * 2.0. For details, see http://oss.sgi.com/projects/FreeB/ .
+ */
 
-int32_t graphics_get_display_size( const uint16_t display_number,
-                                                    uint32_t *width,
-                                                    uint32_t *height);
+/* Platform-specific types and definitions for OpenGL ES 1.X  gl.h
+ *
+ * Adopters may modify khrplatform.h and this file to suit their platform.
+ * You are encouraged to submit all modifications to the Khronos group so that
+ * they can be included in future versions of this file.  Please submit changes
+ * by sending them to the public Khronos Bugzilla (http://khronos.org/bugzilla)
+ * by filing a bug against product "OpenGL-ES" component "Registry".
+ */
 
-#include "interface/vmcs_host/vc_dispmanx.h"
-#include "interface/vmcs_host/vc_tvservice.h"
-#include "interface/vmcs_host/vc_cec.h"
-#include "interface/vmcs_host/vc_cecservice.h"
-#include "interface/vmcs_host/vcgencmd.h"
+#include "../KHR/khrplatform.h"
+
+#ifndef GL_API
+#define GL_API      KHRONOS_APICALL
+#endif
+
+#ifndef GL_APIENTRY
+#define GL_APIENTRY KHRONOS_APIENTRY
+#endif
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif
-
+#endif /* __glplatform_h_ */

@@ -24,34 +24,24 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+#ifndef VCOS_STDBOOL_H
+#define VCOS_STDBOOL_H
 
-// Header file with useful bits from other headers
+#ifndef __cplusplus
 
-#ifndef BCM_HOST_H
-#define BCM_HOST_H
-
-#include <stdint.h>
-
-#ifdef __cplusplus
-extern "C" {
+#if defined(__STDC__) && (__STDC_VERSION__ >= 199901L)
+#include <stdbool.h>
+#else
+/* sizeof(bool) == 1. hopefully this matches up with c++ (so structures and
+ * such containing bool are binary compatible), but the c++ standard doesn't
+ * require sizeof(bool) == 1, so there's no guarantee */
+typedef unsigned char bool;
+enum {
+   false,
+   true
+};
 #endif
 
-void bcm_host_init(void);
-void bcm_host_deinit(void);
-
-int32_t graphics_get_display_size( const uint16_t display_number,
-                                                    uint32_t *width,
-                                                    uint32_t *height);
-
-#include "interface/vmcs_host/vc_dispmanx.h"
-#include "interface/vmcs_host/vc_tvservice.h"
-#include "interface/vmcs_host/vc_cec.h"
-#include "interface/vmcs_host/vc_cecservice.h"
-#include "interface/vmcs_host/vcgencmd.h"
-
-#ifdef __cplusplus
-}
-#endif
+#endif /* __cplusplus */
 
 #endif
-

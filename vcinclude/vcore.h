@@ -25,33 +25,40 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-// Header file with useful bits from other headers
+#ifndef VCORE_H
+#define VCORE_H
 
-#ifndef BCM_HOST_H
-#define BCM_HOST_H
+#ifdef __VIDEOCORE__
+#include "vc/intrinsics.h"
+#undef asm
+#define asm(x) _ASM(x)
 
-#include <stdint.h>
+#undef min
+#define min(x,y) _min(x,y)
 
-#ifdef __cplusplus
-extern "C" {
+#undef max
+#define max(x,y) _max(x,y)
+
+#ifndef abs
+#define abs(x) _abs(x)
+#endif
+#else
+#define _vasm asm
+#define _bkpt() do {asm(" bkpt");}while(0)
+#define _di() do{asm(" di");}while(0)
+#define _ei() do{asm(" ei");}while(0)
+#define _nop() do{asm(" nop");}while(0)
+#define _sleep() do{asm(" sleep");}while(0)
+
+#undef min
+#define min(x,y) ((x)<(y) ? (x):(y))
+
+#undef max
+#define max(x,y) ((x)>(y) ? (x):(y))
+
+#ifndef abs
+#define abs(x) ((x)>=0 ? (x):-(x))
+#endif
 #endif
 
-void bcm_host_init(void);
-void bcm_host_deinit(void);
-
-int32_t graphics_get_display_size( const uint16_t display_number,
-                                                    uint32_t *width,
-                                                    uint32_t *height);
-
-#include "interface/vmcs_host/vc_dispmanx.h"
-#include "interface/vmcs_host/vc_tvservice.h"
-#include "interface/vmcs_host/vc_cec.h"
-#include "interface/vmcs_host/vc_cecservice.h"
-#include "interface/vmcs_host/vcgencmd.h"
-
-#ifdef __cplusplus
-}
 #endif
-
-#endif
-

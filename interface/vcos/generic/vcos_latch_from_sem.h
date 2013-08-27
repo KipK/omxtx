@@ -25,33 +25,44 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-// Header file with useful bits from other headers
+/*=============================================================================
+VideoCore OS Abstraction Layer - Construct a latch from a semaphore
+=============================================================================*/
 
-#ifndef BCM_HOST_H
-#define BCM_HOST_H
+/** FIXME: rename to vcos_mutex_from_sem.c
+  */
 
-#include <stdint.h>
+typedef struct VCOS_MUTEX_T {
+   VCOS_SEMAPHORE_T sem;
+   struct VCOS_THREAD_T *owner;
+} VCOS_MUTEX_T;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+extern VCOS_STATUS_T vcos_generic_mutex_create(VCOS_MUTEX_T *latch, const char *name);
+extern void vcos_generic_mutex_delete(VCOS_MUTEX_T *latch);
+extern VCOS_STATUS_T vcos_generic_mutex_lock(VCOS_MUTEX_T *latch);
+extern void vcos_generic_mutex_unlock(VCOS_MUTEX_T *latch);
 
-void bcm_host_init(void);
-void bcm_host_deinit(void);
+#if defined(VCOS_INLINE_BODIES)
 
-int32_t graphics_get_display_size( const uint16_t display_number,
-                                                    uint32_t *width,
-                                                    uint32_t *height);
-
-#include "interface/vmcs_host/vc_dispmanx.h"
-#include "interface/vmcs_host/vc_tvservice.h"
-#include "interface/vmcs_host/vc_cec.h"
-#include "interface/vmcs_host/vc_cecservice.h"
-#include "interface/vmcs_host/vcgencmd.h"
-
-#ifdef __cplusplus
+VCOS_INLINE_IMPL
+VCOS_STATUS_T vcos_mutex_create(VCOS_MUTEX_T *latch, const char *name) {
+   return vcos_generic_mutex_create(latch,name);
 }
-#endif
 
-#endif
+VCOS_INLINE_IMPL
+void vcos_mutex_delete(VCOS_MUTEX_T *latch) {
+   vcos_generic_mutex_delete(latch);
+}
+
+VCOS_INLINE_IMPL
+VCOS_STATUS_T vcos_mutex_lock(VCOS_MUTEX_T *latch) {
+   return vcos_generic_mutex_lock(latch);
+}
+
+VCOS_INLINE_IMPL
+void vcos_mutex_unlock(VCOS_MUTEX_T *latch) {
+   vcos_generic_mutex_unlock(latch);
+}
+
+#endif /* VCOS_INLINE_BODIES */
 

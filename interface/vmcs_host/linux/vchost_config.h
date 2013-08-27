@@ -25,33 +25,37 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-// Header file with useful bits from other headers
+#ifndef VCHOST_CONFIG_H
+#define VCHOST_CONFIG_H
 
-#ifndef BCM_HOST_H
-#define BCM_HOST_H
+#include "interface/vcos/vcos.h"
 
-#include <stdint.h>
+#if 0
+/* Types that map onto VideoCore's types of the same name. */
+typedef unsigned char uint8_t;
+typedef unsigned short uint16_t;
+typedef short int16_t;
+typedef long int32_t;
+typedef unsigned long uint32_t;
+typedef long long int64_t;
+typedef unsigned long long uint64_t;
 
-#ifdef __cplusplus
-extern "C" {
+#ifndef vc_assert
+#define vc_assert(cond) vcos_assert(cond)
+#endif
 #endif
 
-void bcm_host_init(void);
-void bcm_host_deinit(void);
+/* On this platform we need to be able to release the host-side software resources. */
+extern void vc_os_close(void);
 
-int32_t graphics_get_display_size( const uint16_t display_number,
-                                                    uint32_t *width,
-                                                    uint32_t *height);
-
-#include "interface/vmcs_host/vc_dispmanx.h"
-#include "interface/vmcs_host/vc_tvservice.h"
-#include "interface/vmcs_host/vc_cec.h"
-#include "interface/vmcs_host/vc_cecservice.h"
-#include "interface/vmcs_host/vcgencmd.h"
-
-#ifdef __cplusplus
-}
+#ifndef VCHPRE_
+#define VCHPRE_     extern
+#endif
+#ifndef VCHPOST_
+#define VCHPOST_
+#endif
+#ifndef VCCPRE_
+#define VCCPRE_     
 #endif
 
 #endif
-

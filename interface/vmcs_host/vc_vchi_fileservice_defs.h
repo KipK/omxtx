@@ -25,33 +25,51 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-// Header file with useful bits from other headers
+#ifndef VC_VCHI_FILESERVICE_DEFS_H
+#define VC_VCHI_FILESERVICE_DEFS_H
 
-#ifndef BCM_HOST_H
-#define BCM_HOST_H
+#include "interface/vchi/vchi.h"
 
-#include <stdint.h>
+/* Definitions (not used by API) */
 
-#ifdef __cplusplus
-extern "C" {
+/* structure used by both side to communicate */
+#define FILESERV_MAX_BULK_SECTOR  128   //must be power of two
+
+#define FILESERV_SECTOR_LENGTH  512
+
+#define FILESERV_MAX_BULK (FILESERV_MAX_BULK_SECTOR*FILESERV_SECTOR_LENGTH)
+
+#define FILESERV_4CC  MAKE_FOURCC("FSRV")
+
+typedef enum FILESERV_EVENT_T
+{
+   FILESERV_BULK_RX = 0,
+   FILESERV_BULK_TX,
+   FILESERV_BULK_RX_0,
+   FILESERV_BULK_RX_1
+}FILESERV_EVENT_T;
+//this following structure has to equal VCHI_MAX_MSG_SIZE
+#define FILESERV_MAX_DATA	(VCHI_MAX_MSG_SIZE - 40) //(VCHI_MAX_MSG_SIZE - 24)
+
+typedef struct{
+	uint32_t xid;		    //4 // transaction's ID, used to match cmds with response
+   uint32_t cmd_code;    //4
+   uint32_t params[4];   //16
+   char  data[FILESERV_MAX_DATA];
+}FILESERV_MSG_T;
+
+typedef enum
+{
+   FILESERV_RESP_OK,
+   FILESERV_RESP_ERROR,
+   FILESERV_BULK_READ,
+   FILESERV_BULK_WRITE,
+
+} FILESERV_RESP_CODE_T;
+
+
+/* Protocol (not used by API) version 1.2 */
+
+
+
 #endif
-
-void bcm_host_init(void);
-void bcm_host_deinit(void);
-
-int32_t graphics_get_display_size( const uint16_t display_number,
-                                                    uint32_t *width,
-                                                    uint32_t *height);
-
-#include "interface/vmcs_host/vc_dispmanx.h"
-#include "interface/vmcs_host/vc_tvservice.h"
-#include "interface/vmcs_host/vc_cec.h"
-#include "interface/vmcs_host/vc_cecservice.h"
-#include "interface/vmcs_host/vcgencmd.h"
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif
-

@@ -25,33 +25,62 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-// Header file with useful bits from other headers
+/*=============================================================================
+VideoCore OS Abstraction Layer - reentrant mutex public header file
+=============================================================================*/
 
-#ifndef BCM_HOST_H
-#define BCM_HOST_H
-
-#include <stdint.h>
+#ifndef VCOS_REENTRANT_MUTEX_H
+#define VCOS_REENTRANT_MUTEX_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void bcm_host_init(void);
-void bcm_host_deinit(void);
+#include "interface/vcos/vcos_types.h"
+#include "vcos_platform.h"
 
-int32_t graphics_get_display_size( const uint16_t display_number,
-                                                    uint32_t *width,
-                                                    uint32_t *height);
+/**
+ * \file
+ *
+ * Reentrant Mutex API. You can take one of these mutexes even if you've already
+ * taken it. Just to make sure.
+ *
+ * A re-entrant mutex may be slower on some platforms than a regular one.
+ *
+ * \sa vcos_mutex.h
+ *
+ */
 
-#include "interface/vmcs_host/vc_dispmanx.h"
-#include "interface/vmcs_host/vc_tvservice.h"
-#include "interface/vmcs_host/vc_cec.h"
-#include "interface/vmcs_host/vc_cecservice.h"
-#include "interface/vmcs_host/vcgencmd.h"
+/** Create a mutex.
+  *
+  * @param m      Filled in with mutex on return
+  * @param name   A non-null name for the mutex, used for diagnostics.
+  *
+  * @return VCOS_SUCCESS if mutex was created, or error code.
+  */
+VCOS_INLINE_DECL
+VCOS_STATUS_T vcos_reentrant_mutex_create(VCOS_REENTRANT_MUTEX_T *m, const char *name);
+
+/** Delete the mutex.
+  */
+VCOS_INLINE_DECL
+void vcos_reentrant_mutex_delete(VCOS_REENTRANT_MUTEX_T *m);
+
+/** Wait to claim the mutex. Must not have already been claimed by the current thread.
+  */
+#ifndef vcos_reentrant_mutexlock
+VCOS_INLINE_DECL
+void vcos_reentrant_mutex_lock(VCOS_REENTRANT_MUTEX_T *m);
+
+/** Release the mutex.
+  */
+VCOS_INLINE_DECL
+void vcos_reentrant_mutex_unlock(VCOS_REENTRANT_MUTEX_T *m);
+#endif
+
 
 #ifdef __cplusplus
 }
 #endif
-
 #endif
 

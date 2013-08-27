@@ -25,33 +25,45 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-// Header file with useful bits from other headers
+#ifndef VC_VCHI_DISPMANX_H
+#define VC_VCHI_DISPMANX_H
 
-#ifndef BCM_HOST_H
-#define BCM_HOST_H
+#include "interface/peer/vc_vchi_dispmanx_common.h"
 
-#include <stdint.h>
+#define VC_NUM_HOST_RESOURCES 64
+#define DISPMANX_MSGFIFO_SIZE 1024
+#define DISPMANX_CLIENT_NAME MAKE_FOURCC("DISP")
+#define DISPMANX_NOTIFY_NAME MAKE_FOURCC("UPDH")
 
-#ifdef __cplusplus
-extern "C" {
+//Or with command to indicate we don't need a response
+#define DISPMANX_NO_REPLY_MASK (1<<31)
+
+typedef struct {
+   char     description[32];
+   uint32_t width;
+   uint32_t height;
+   uint32_t aspect_pixwidth;
+   uint32_t aspect_pixheight;
+   uint32_t fieldrate_num;
+   uint32_t fieldrate_denom;
+   uint32_t fields_per_frame;
+   uint32_t transform;        
+} GET_MODES_DATA_T;
+
+typedef struct {
+   int32_t  response;
+   uint32_t width;
+   uint32_t height;
+   uint32_t transform;
+   uint32_t input_format;
+} GET_INFO_DATA_T;
+
+//Attributes changes flag mask
+#define ELEMENT_CHANGE_LAYER          (1<<0)
+#define ELEMENT_CHANGE_OPACITY        (1<<1)
+#define ELEMENT_CHANGE_DEST_RECT      (1<<2)
+#define ELEMENT_CHANGE_SRC_RECT       (1<<3)
+#define ELEMENT_CHANGE_MASK_RESOURCE  (1<<4)
+#define ELEMENT_CHANGE_TRANSFORM      (1<<5)
+
 #endif
-
-void bcm_host_init(void);
-void bcm_host_deinit(void);
-
-int32_t graphics_get_display_size( const uint16_t display_number,
-                                                    uint32_t *width,
-                                                    uint32_t *height);
-
-#include "interface/vmcs_host/vc_dispmanx.h"
-#include "interface/vmcs_host/vc_tvservice.h"
-#include "interface/vmcs_host/vc_cec.h"
-#include "interface/vmcs_host/vc_cecservice.h"
-#include "interface/vmcs_host/vcgencmd.h"
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif
-

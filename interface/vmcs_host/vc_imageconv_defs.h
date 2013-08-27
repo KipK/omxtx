@@ -24,34 +24,28 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+#ifndef IMAGECONV_DEFS_H
+#define IMAGECONV_DEFS_H
 
-// Header file with useful bits from other headers
+/** Statistics for image conversion to foreign image types
+ */
+typedef struct
+{
+   uint32_t magic;
+   uint32_t size;                   /**< Size of this structure, in bytes */
+   uint32_t conversions;            /**< Total conversions so far */
+   uint32_t duplicate_conversions;  /**< Duplicate conversions (same image twice) */
+   uint32_t size_requests;          /**< Num calls to get_converted_size */
+   uint32_t consumed_count;         /**< How many converted images were consumed */
+   uint32_t failures;               /**< Failed conversions */
+   uint32_t time_spent;             /**< Time spent converting, us */
+   uint32_t max_vrf_delay;          /**< The max time waiting for the VRF */
+   uint32_t vrf_wait_time;          /**< Total time waiting for the VRF */
+   uint32_t last_mem_handle;        /**< Last mem handle converted */
+   uint32_t first_image_ts;         /**< Timestamp of first image */
+   uint32_t last_image_ts;          /**< Timestamp of first image */
+   uint32_t max_delay;              /**< Jitter */
+} IMAGECONV_STATS_T;
 
-#ifndef BCM_HOST_H
-#define BCM_HOST_H
-
-#include <stdint.h>
-
-#ifdef __cplusplus
-extern "C" {
+#define IMAGECONV_STATS_MAGIC 0x494D454C
 #endif
-
-void bcm_host_init(void);
-void bcm_host_deinit(void);
-
-int32_t graphics_get_display_size( const uint16_t display_number,
-                                                    uint32_t *width,
-                                                    uint32_t *height);
-
-#include "interface/vmcs_host/vc_dispmanx.h"
-#include "interface/vmcs_host/vc_tvservice.h"
-#include "interface/vmcs_host/vc_cec.h"
-#include "interface/vmcs_host/vc_cecservice.h"
-#include "interface/vmcs_host/vcgencmd.h"
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif
-

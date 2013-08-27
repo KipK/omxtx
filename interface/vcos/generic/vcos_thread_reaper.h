@@ -25,33 +25,31 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-// Header file with useful bits from other headers
+/*=============================================================================
+VideoCore OS Abstraction Layer - thread reaping
+=============================================================================*/
 
-#ifndef BCM_HOST_H
-#define BCM_HOST_H
+#ifndef VCOS_THREAD_REAPER_H
+#define VCOS_THREAD_REAPER_H
 
-#include <stdint.h>
+#define VCOS_HAVE_THREAD_REAPER
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+/** Initialise the thread reaper.
+  */
+VCOS_STATUS_T vcos_thread_reaper_init(void);
 
-void bcm_host_init(void);
-void bcm_host_deinit(void);
-
-int32_t graphics_get_display_size( const uint16_t display_number,
-                                                    uint32_t *width,
-                                                    uint32_t *height);
-
-#include "interface/vmcs_host/vc_dispmanx.h"
-#include "interface/vmcs_host/vc_tvservice.h"
-#include "interface/vmcs_host/vc_cec.h"
-#include "interface/vmcs_host/vc_cecservice.h"
-#include "interface/vmcs_host/vcgencmd.h"
-
-#ifdef __cplusplus
-}
-#endif
+/** Reap a thread. Arranges for the thread to be automatically
+  * joined.
+  *
+  * @sa vcos_thread_join().
+  *
+  * @param thread           the thread to terminate
+  * @param on_terminated    called after the thread has exited
+  * @param cxt              pass back to the callback
+  *
+  */
+void vcos_thread_reap(VCOS_THREAD_T *thread, void (*on_terminated)(void*), void *cxt);
 
 #endif
+
 

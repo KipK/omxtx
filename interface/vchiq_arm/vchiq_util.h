@@ -23,35 +23,35 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ */
 
-// Header file with useful bits from other headers
+#ifndef VCHIQ_UTIL_H
+#define VCHIQ_UTIL_H
 
-#ifndef BCM_HOST_H
-#define BCM_HOST_H
+#include "vchiq_if.h"
+#include "interface/vcos/vcos.h"
 
-#include <stdint.h>
+typedef struct {
+   int size;
+   int read;
+   int write;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+   VCOS_EVENT_T pop;
+   VCOS_EVENT_T push;
 
-void bcm_host_init(void);
-void bcm_host_deinit(void);
+   VCHIQ_HEADER_T **storage;
+} VCHIU_QUEUE_T;
 
-int32_t graphics_get_display_size( const uint16_t display_number,
-                                                    uint32_t *width,
-                                                    uint32_t *height);
+extern int  vchiu_queue_init(VCHIU_QUEUE_T *queue, int size);
+extern void vchiu_queue_delete(VCHIU_QUEUE_T *queue);
 
-#include "interface/vmcs_host/vc_dispmanx.h"
-#include "interface/vmcs_host/vc_tvservice.h"
-#include "interface/vmcs_host/vc_cec.h"
-#include "interface/vmcs_host/vc_cecservice.h"
-#include "interface/vmcs_host/vcgencmd.h"
+extern int vchiu_queue_is_empty(VCHIU_QUEUE_T *queue);
+extern int vchiu_queue_is_full(VCHIU_QUEUE_T *queue);
 
-#ifdef __cplusplus
-}
-#endif
+extern void vchiu_queue_push(VCHIU_QUEUE_T *queue, VCHIQ_HEADER_T *header);
+
+extern VCHIQ_HEADER_T *vchiu_queue_peek(VCHIU_QUEUE_T *queue);
+extern VCHIQ_HEADER_T *vchiu_queue_pop(VCHIU_QUEUE_T *queue);
 
 #endif
 

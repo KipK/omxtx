@@ -24,34 +24,24 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+#ifndef USER_NODEFS_H
+#define USER_NODEFS_H
 
-// Header file with useful bits from other headers
+/*
+ * This tells coverity not to expand the assert macro, so it still sees the
+ * asserts in the code, even in release builds (we currently run coverity on
+ * our release builds). Unfortunately MetaWare won't compile it, even though
+ * __COVERITY__ isn't defined, so we put this in its own header.
+ *
+ * FIXME: This belongs in the Coverity config (in a file called
+ * config/user_nodefs.h)
+ */
+#nodef assert
 
-#ifndef BCM_HOST_H
-#define BCM_HOST_H
+/*
+ * So we need to declare the function now that it isn't a macro any more. It's
+ * already built into coverity that assert is a "killpath".
+ */
+extern void assert(int cond);
 
-#include <stdint.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-void bcm_host_init(void);
-void bcm_host_deinit(void);
-
-int32_t graphics_get_display_size( const uint16_t display_number,
-                                                    uint32_t *width,
-                                                    uint32_t *height);
-
-#include "interface/vmcs_host/vc_dispmanx.h"
-#include "interface/vmcs_host/vc_tvservice.h"
-#include "interface/vmcs_host/vc_cec.h"
-#include "interface/vmcs_host/vc_cecservice.h"
-#include "interface/vmcs_host/vcgencmd.h"
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif
-
+#endif /* USER_NODEFS_H */

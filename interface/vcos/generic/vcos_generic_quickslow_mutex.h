@@ -25,33 +25,71 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-// Header file with useful bits from other headers
+/*=============================================================================
+VideoCore OS Abstraction Layer - reentrant mutexes created from regular ones.
+=============================================================================*/
 
-#ifndef BCM_HOST_H
-#define BCM_HOST_H
-
-#include <stdint.h>
+#ifndef VCOS_GENERIC_QUICKSLOW_MUTEX_H
+#define VCOS_GENERIC_QUICKSLOW_MUTEX_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void bcm_host_init(void);
-void bcm_host_deinit(void);
+#include "interface/vcos/vcos_types.h"
 
-int32_t graphics_get_display_size( const uint16_t display_number,
-                                                    uint32_t *width,
-                                                    uint32_t *height);
+/**
+ * \file
+ *
+ * Quickslow Mutexes implemented as regular ones (i.e. quick and slow modes are the same).
+ *
+ */
 
-#include "interface/vmcs_host/vc_dispmanx.h"
-#include "interface/vmcs_host/vc_tvservice.h"
-#include "interface/vmcs_host/vc_cec.h"
-#include "interface/vmcs_host/vc_cecservice.h"
-#include "interface/vmcs_host/vcgencmd.h"
+typedef VCOS_MUTEX_T VCOS_QUICKSLOW_MUTEX_T;
+
+#if defined(VCOS_INLINE_BODIES)
+VCOS_INLINE_IMPL
+VCOS_STATUS_T vcos_quickslow_mutex_create(VCOS_QUICKSLOW_MUTEX_T *m, const char *name)
+{
+   return vcos_mutex_create(m, name);
+}
+
+VCOS_INLINE_IMPL
+void vcos_quickslow_mutex_delete(VCOS_QUICKSLOW_MUTEX_T *m)
+{
+   vcos_mutex_delete(m);
+}
+
+VCOS_INLINE_IMPL
+void vcos_quickslow_mutex_lock(VCOS_QUICKSLOW_MUTEX_T *m)
+{
+   while (vcos_mutex_lock(m) == VCOS_EAGAIN);
+}
+
+VCOS_INLINE_IMPL
+void vcos_quickslow_mutex_unlock(VCOS_QUICKSLOW_MUTEX_T *m)
+{
+   vcos_mutex_unlock(m);
+}
+
+VCOS_INLINE_IMPL
+void vcos_quickslow_mutex_lock_quick(VCOS_QUICKSLOW_MUTEX_T *m)
+{
+   while (vcos_mutex_lock(m) == VCOS_EAGAIN);
+}
+
+VCOS_INLINE_IMPL
+void vcos_quickslow_mutex_unlock_quick(VCOS_QUICKSLOW_MUTEX_T *m)
+{
+   vcos_mutex_unlock(m);
+}
+
+#endif
+
 
 #ifdef __cplusplus
 }
 #endif
-
 #endif
+
 

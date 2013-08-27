@@ -25,33 +25,68 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-// Header file with useful bits from other headers
+/*=============================================================================
+VideoCore OS Abstraction Layer - public header file
+=============================================================================*/
 
-#ifndef BCM_HOST_H
-#define BCM_HOST_H
-
-#include <stdint.h>
+#ifndef VCOS_ATOMIC_FLAGS_H
+#define VCOS_ATOMIC_FLAGS_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void bcm_host_init(void);
-void bcm_host_deinit(void);
+#include "interface/vcos/vcos_types.h"
+#include "vcos_platform.h"
 
-int32_t graphics_get_display_size( const uint16_t display_number,
-                                                    uint32_t *width,
-                                                    uint32_t *height);
+/**
+ * \file vcos_atomic_flags.h
+ *
+ * Defines atomic flags API.
+ *
+ * 32 flags. Atomic "or" and "get and clear" operations
+ */
 
-#include "interface/vmcs_host/vc_dispmanx.h"
-#include "interface/vmcs_host/vc_tvservice.h"
-#include "interface/vmcs_host/vc_cec.h"
-#include "interface/vmcs_host/vc_cecservice.h"
-#include "interface/vmcs_host/vcgencmd.h"
+/**
+ * Create an atomic flags instance.
+ *
+ * @param atomic_flags Pointer to atomic flags instance, filled in on return
+ *
+ * @return VCOS_SUCCESS if succeeded.
+ */
+VCOS_INLINE_DECL
+VCOS_STATUS_T vcos_atomic_flags_create(VCOS_ATOMIC_FLAGS_T *atomic_flags);
+
+/**
+ * Atomically set the specified flags.
+ *
+ * @param atomic_flags Instance to set flags on
+ * @param flags        Mask of flags to set
+ */
+VCOS_INLINE_DECL
+void vcos_atomic_flags_or(VCOS_ATOMIC_FLAGS_T *atomic_flags, uint32_t flags);
+
+/**
+ * Retrieve the current flags and then clear them. The entire operation is
+ * atomic.
+ *
+ * @param atomic_flags Instance to get/clear flags from/on
+ *
+ * @return Mask of flags which were set (and we cleared)
+ */
+VCOS_INLINE_DECL
+uint32_t vcos_atomic_flags_get_and_clear(VCOS_ATOMIC_FLAGS_T *atomic_flags);
+
+/**
+ * Delete an atomic flags instance.
+ *
+ * @param atomic_flags Instance to delete
+ */
+VCOS_INLINE_DECL
+void vcos_atomic_flags_delete(VCOS_ATOMIC_FLAGS_T *atomic_flags);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif
-

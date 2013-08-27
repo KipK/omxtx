@@ -25,33 +25,38 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-// Header file with useful bits from other headers
+/*=============================================================================
+VideoCore OS Abstraction Layer - 'once'
+=============================================================================*/
 
-#ifndef BCM_HOST_H
-#define BCM_HOST_H
-
-#include <stdint.h>
+#ifndef VCOS_ONCE_H
+#define VCOS_ONCE_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void bcm_host_init(void);
-void bcm_host_deinit(void);
+#include "interface/vcos/vcos_types.h"
+#include "vcos_platform.h"
 
-int32_t graphics_get_display_size( const uint16_t display_number,
-                                                    uint32_t *width,
-                                                    uint32_t *height);
+/**
+ * \file vcos_once.h
+ *
+ * Ensure something is called only once.
+ *
+ * Initialize once_control to VCOS_ONCE_INIT. The first
+ * time this is called, the init_routine will be called. Thereafter
+ * it won't.
+ *
+ * \sa pthread_once()
+ *
+ */
 
-#include "interface/vmcs_host/vc_dispmanx.h"
-#include "interface/vmcs_host/vc_tvservice.h"
-#include "interface/vmcs_host/vc_cec.h"
-#include "interface/vmcs_host/vc_cecservice.h"
-#include "interface/vmcs_host/vcgencmd.h"
+VCOS_STATUS_T vcos_once(VCOS_ONCE_T *once_control,
+                        void (*init_routine)(void));
 
 #ifdef __cplusplus
 }
 #endif
-
 #endif
 

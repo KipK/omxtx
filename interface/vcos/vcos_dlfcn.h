@@ -25,33 +25,62 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-// Header file with useful bits from other headers
+/*=============================================================================
+VCOS - abstraction over dynamic library opening
+=============================================================================*/
 
-#ifndef BCM_HOST_H
-#define BCM_HOST_H
+#ifndef VCOS_DLFCN_H
+#define VCOS_DLFCN_H
 
-#include <stdint.h>
+#include "interface/vcos/vcos_types.h"
+#include "vcos_platform.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void bcm_host_init(void);
-void bcm_host_deinit(void);
+/**
+ * \file
+ *
+ * Loading dynamic libraries. See also dlfcn.h.
+ */
 
-int32_t graphics_get_display_size( const uint16_t display_number,
-                                                    uint32_t *width,
-                                                    uint32_t *height);
+/** Open a dynamic library.
+  *
+  * @param name  name of the library
+  * @param mode  Load lazily or immediately (VCOS_DL_LAZY, VCOS_DL_NOW, VCOS_DL_LOCAL, VCOS_DL_GLOBAL).
+  *
+  * @return A handle for use in subsequent calls.
+  */
+VCOSPRE_ void * VCOSPOST_ vcos_dlopen(const char *name, int mode);
 
-#include "interface/vmcs_host/vc_dispmanx.h"
-#include "interface/vmcs_host/vc_tvservice.h"
-#include "interface/vmcs_host/vc_cec.h"
-#include "interface/vmcs_host/vc_cecservice.h"
-#include "interface/vmcs_host/vcgencmd.h"
+/** Look up a symbol.
+  *
+  * @param handle Handle to open
+  * @param name   Name of function
+  *
+  * @return Function pointer, or NULL.
+  */
+VCOSPRE_ void VCOSPOST_ (*vcos_dlsym(void *handle, const char *name))(void);
+
+/** Close a library
+  *
+  * @param handle Handle to close
+  */
+VCOSPRE_ int VCOSPOST_ vcos_dlclose (void *handle);
+
+/** Return error message from library.
+  *
+  * @param err  On return, set to non-zero if an error has occurred
+  * @param buf  Buffer to write error to
+  * @param len  Size of buffer (including terminating NUL).
+  */
+VCOSPRE_ int VCOSPOST_ vcos_dlerror(int *err, char *buf, size_t buflen);
+
 
 #ifdef __cplusplus
 }
 #endif
-
 #endif
+
 

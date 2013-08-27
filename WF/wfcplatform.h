@@ -25,33 +25,47 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-// Header file with useful bits from other headers
+#ifndef _WFCPLATFORM_H_
+#define _WFCPLATFORM_H_
 
-#ifndef BCM_HOST_H
-#define BCM_HOST_H
-
-#include <stdint.h>
+#include "../KHR/khrplatform.h"
+#include "../EGL/egl.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void bcm_host_init(void);
-void bcm_host_deinit(void);
+#ifndef WFC_API_CALL
+#define WFC_API_CALL KHRONOS_APICALL
+#endif
+#ifndef WFC_APIENTRY
+#define WFC_APIENTRY KHRONOS_APIENTRY
+#endif
+#ifndef WFC_APIEXIT
+#define WFC_APIEXIT KHRONOS_APIATTRIBUTES
+#endif
 
-int32_t graphics_get_display_size( const uint16_t display_number,
-                                                    uint32_t *width,
-                                                    uint32_t *height);
+#ifndef WFC_DEFAULT_SCREEN_NUMBER
+#define WFC_DEFAULT_SCREEN_NUMBER (0)
+#endif
 
-#include "interface/vmcs_host/vc_dispmanx.h"
-#include "interface/vmcs_host/vc_tvservice.h"
-#include "interface/vmcs_host/vc_cec.h"
-#include "interface/vmcs_host/vc_cecservice.h"
-#include "interface/vmcs_host/vcgencmd.h"
+typedef enum {
+    WFC_FALSE               = 0,
+    WFC_TRUE                = 1,
+    WFC_BOOLEAN_FORCE_32BIT = 0x7FFFFFFF
+} WFCboolean;
+
+typedef khronos_int32_t   WFCint;
+typedef khronos_float_t   WFCfloat;
+typedef khronos_uint32_t  WFCbitfield;
+typedef khronos_uint32_t  WFCHandle;
+
+typedef EGLDisplay   WFCEGLDisplay;
+typedef void         *WFCEGLSync;   /* An opaque handle to an EGLSyncKHR */
+typedef WFCHandle    WFCNativeStreamType;
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif
-
+#endif /* _WFCPLATFORM_H_ */

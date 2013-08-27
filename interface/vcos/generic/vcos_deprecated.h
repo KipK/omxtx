@@ -25,33 +25,12 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-// Header file with useful bits from other headers
+/*
+The symbol vcos_deprecated_code may be defined at most once, by the inclusion of "vcos_deprecated.h" in vcos_init.c.
+Any other inclusions of this header will cause the linker to warn about multiple definitions of vcos_deprecated_code, for example:
+   [ldvc] (Warning) "vcos_deprecated_code" is multiply defined in libs/vcos_threadx/vcos_init.c.o and libs/xxxxx/xxxxx.c.o
+If you see a build message like this then the configuration you are building is using deprecated code.
+Contact the person named in the accompanying comment for advice - do not remove the inclusion.
+*/
 
-#ifndef BCM_HOST_H
-#define BCM_HOST_H
-
-#include <stdint.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-void bcm_host_init(void);
-void bcm_host_deinit(void);
-
-int32_t graphics_get_display_size( const uint16_t display_number,
-                                                    uint32_t *width,
-                                                    uint32_t *height);
-
-#include "interface/vmcs_host/vc_dispmanx.h"
-#include "interface/vmcs_host/vc_tvservice.h"
-#include "interface/vmcs_host/vc_cec.h"
-#include "interface/vmcs_host/vc_cecservice.h"
-#include "interface/vmcs_host/vcgencmd.h"
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif
-
+int vcos_deprecated_code;

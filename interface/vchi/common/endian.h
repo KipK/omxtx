@@ -25,33 +25,20 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-// Header file with useful bits from other headers
+#ifndef _VCHI_ENDIAN_H_
+#define _VCHI_ENDIAN_H_
 
-#ifndef BCM_HOST_H
-#define BCM_HOST_H
+#include "interface/vcos/vcos.h"
 
-#include <stdint.h>
+int16_t  vchi_readbuf_int16 ( const void *ptr );
+uint16_t vchi_readbuf_uint16( const void *ptr );
+uint32_t vchi_readbuf_uint32( const void *ptr );
+vcos_fourcc_t vchi_readbuf_fourcc( const void *ptr );
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+void vchi_writebuf_uint16( void *ptr, uint16_t value );
+void vchi_writebuf_uint32( void *ptr, uint32_t value );
+void vchi_writebuf_fourcc( void *ptr, vcos_fourcc_t value );
 
-void bcm_host_init(void);
-void bcm_host_deinit(void);
+#endif /* _VCHI_ENDIAN_H_ */
 
-int32_t graphics_get_display_size( const uint16_t display_number,
-                                                    uint32_t *width,
-                                                    uint32_t *height);
-
-#include "interface/vmcs_host/vc_dispmanx.h"
-#include "interface/vmcs_host/vc_tvservice.h"
-#include "interface/vmcs_host/vc_cec.h"
-#include "interface/vmcs_host/vc_cecservice.h"
-#include "interface/vmcs_host/vcgencmd.h"
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif
-
+/********************************** End of file ******************************************/

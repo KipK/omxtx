@@ -24,34 +24,47 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+#ifndef _VC_CMA_H_
+#define _VC_CMA_H_
 
-// Header file with useful bits from other headers
+#include "interface/vcos/vcos.h"
+#include "interface/vchiq_arm/vchiq.h"
 
-#ifndef BCM_HOST_H
-#define BCM_HOST_H
+#ifdef __linux__
 
-#include <stdint.h>
+#include <linux/ioctl.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#define VC_CMA_IOC_MAGIC 0xc5
 
-void bcm_host_init(void);
-void bcm_host_deinit(void);
-
-int32_t graphics_get_display_size( const uint16_t display_number,
-                                                    uint32_t *width,
-                                                    uint32_t *height);
-
-#include "interface/vmcs_host/vc_dispmanx.h"
-#include "interface/vmcs_host/vc_tvservice.h"
-#include "interface/vmcs_host/vc_cec.h"
-#include "interface/vmcs_host/vc_cecservice.h"
-#include "interface/vmcs_host/vcgencmd.h"
-
-#ifdef __cplusplus
-}
-#endif
+#define VC_CMA_IOC_RESERVE _IO(VC_CMA_IOC_MAGIC, 0)
 
 #endif
 
+#define VC_CMA_FOURCC VCHIQ_MAKE_FOURCC('C','M','A',' ')
+#define VC_CMA_VERSION 2
+
+#define VC_CMA_CHUNK_ORDER 6  /* 256K */
+#define VC_CMA_CHUNK_SIZE (4096 << VC_CMA_CHUNK_ORDER)
+#define VC_CMA_MAX_PARAMS_PER_MSG ((VCHIQ_MAX_MSG_SIZE - sizeof(unsigned short)) / sizeof(unsigned short))
+
+enum
+{
+   VC_CMA_MSG_QUIT,
+   VC_CMA_MSG_OPEN,
+   VC_CMA_MSG_TICK,
+   VC_CMA_MSG_ALLOC,     /* chunk count */
+   VC_CMA_MSG_FREE,      /* chunk, chunk, ... */
+   VC_CMA_MSG_ALLOCATED, /* chunk, chunk, ... */
+   VC_CMA_MSG_REQUEST_ALLOC, /* chunk count */
+   VC_CMA_MSG_REQUEST_FREE,  /* chunk count */
+   VC_CMA_MSG_RESERVE,   /* bytes lo, bytes hi */
+   VC_CMA_MSG_MAX
+};
+
+typedef struct vc_cma_msg_struct
+{
+    unsigned short type;
+    unsigned short params[VC_CMA_MAX_PARAMS_PER_MSG];
+} VC_CMA_MSG_T;
+
+#endif
