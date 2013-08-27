@@ -1,4 +1,4 @@
-install: make get-deps
+install: true
 
 language: c
 
