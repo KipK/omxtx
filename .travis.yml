@@ -13,4 +13,4 @@ script:
   - arm-linux-gnueabi-gcc-4.6 -march=armv6 -marm omxtx.c -o omxtx
   
 after_script:
-  - file omxtx.c
+  - file omxtx
